@@ -1,0 +1,9 @@
+@layer theme, base, antd, components, utilities;
+@import 'tailwindcss';
+
+@theme inline {
+  --color-primary: var(--ant-color-primary);
+  --color-success: var(--ant-color-success);
+  --color-warning: var(--ant-color-warning);
+  --color-error: var(--ant-color-error);
+}

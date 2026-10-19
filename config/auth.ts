@@ -1,4 +1,5 @@
 import { defineConfig } from '@adonisjs/auth'
+import { tokensGuard, tokensUserProvider } from '@adonisjs/auth/access_tokens'
 import { sessionGuard, sessionUserProvider } from '@adonisjs/auth/session'
 import type { InferAuthenticators, InferAuthEvents, Authenticators } from '@adonisjs/auth/types'
 
@@ -16,10 +17,17 @@ const authConfig = defineConfig({
       /**
        * Enable persistent login using remember-me tokens.
        */
-      useRememberMeTokens: false,
+      useRememberMeTokens: true,
+      rememberMeTokensAge: '30 days',
 
       provider: sessionUserProvider({
-        model: () => import('#models/user'),
+        model: () => import('#domain/system/user/user_entity'),
+      }),
+    }),
+    api: tokensGuard({
+      provider: tokensUserProvider({
+        tokens: 'accessTokens',
+        model: () => import('#domain/system/user/user_entity'),
       }),
     }),
   },

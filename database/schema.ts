@@ -7,19 +7,177 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AuthAccessTokenSchema extends BaseModel {
+  static $columns = [
+    'abilities',
+    'createdAt',
+    'expiresAt',
+    'hash',
+    'id',
+    'lastUsedAt',
+    'name',
+    'tokenableId',
+    'type',
+    'updatedAt',
+  ] as const
+  $columns = AuthAccessTokenSchema.$columns
+  @column()
+  declare abilities: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare expiresAt: DateTime | null
+  @column()
+  declare hash: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime()
+  declare lastUsedAt: DateTime | null
+  @column()
+  declare name: string | null
+  @column()
+  declare tokenableId: number
+  @column()
+  declare type: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class AuthRememberTokenSchema extends BaseModel {
+  static $columns = ['createdAt', 'expiresAt', 'hash', 'id', 'tokenableId', 'updatedAt'] as const
+  $columns = AuthRememberTokenSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare expiresAt: DateTime
+  @column()
+  declare hash: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare tokenableId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class PermissionSchema extends BaseModel {
+  static $columns = ['code', 'createdAt', 'id', 'name', 'updatedAt'] as const
+  $columns = PermissionSchema.$columns
+  @column()
+  declare code: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class RolePermissionSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'createdById',
+    'id',
+    'permissionId',
+    'roleId',
+    'updatedAt',
+  ] as const
+  $columns = RolePermissionSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare createdById: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare permissionId: number
+  @column()
+  declare roleId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class RoleSchema extends BaseModel {
+  static $columns = [
+    'code',
+    'createdAt',
+    'createdById',
+    'deletedAt',
+    'id',
+    'name',
+    'updatedAt',
+    'updatedById',
+  ] as const
+  $columns = RoleSchema.$columns
+  @column()
+  declare code: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare createdById: number | null
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare updatedById: number | null
+}
+
+export class UserRoleSchema extends BaseModel {
+  static $columns = ['createdAt', 'createdById', 'id', 'roleId', 'updatedAt', 'userId'] as const
+  $columns = UserRoleSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare createdById: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare roleId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: number
+}
+
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'createdById',
+    'deletedAt',
+    'email',
+    'firstName',
+    'id',
+    'lastName',
+    'password',
+    'updatedAt',
+    'updatedById',
+  ] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
+  declare createdById: number | null
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
   declare email: string
   @column()
-  declare fullName: string | null
+  declare firstName: string
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare lastName: string | null
   @column({ serializeAs: null })
   declare password: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+  declare updatedAt: DateTime
+  @column()
+  declare updatedById: number | null
 }

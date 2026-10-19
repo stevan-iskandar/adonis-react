@@ -1,4 +1,8 @@
+import AuthLayout from '#inertia/layouts/auth_layout'
+import { env } from '#inertia/library/constants/env_constant'
 import { Form } from '@adonisjs/inertia/react'
+import { type Data } from '@generated/data'
+import { type ReactElement } from 'react'
 
 export default function Login() {
   return (
@@ -9,7 +13,7 @@ export default function Login() {
       </div>
 
       <div>
-        <Form route="session.store">
+        <Form route="web.auth.login.submit">
           {({ errors }) => (
             <>
               <div>
@@ -20,6 +24,7 @@ export default function Login() {
                   id="email"
                   autoComplete="username"
                   data-invalid={errors.email ? 'true' : undefined}
+                  defaultValue={env.debug ? env.adminEmail : undefined}
                 />
                 {errors.email && <div>{errors.email}</div>}
               </div>
@@ -31,6 +36,7 @@ export default function Login() {
                   name="password"
                   id="password"
                   autoComplete="current-password"
+                  defaultValue={env.debug ? env.adminPass : undefined}
                 />
                 {errors.password ? <span>{errors.password}</span> : ''}
               </div>
@@ -47,3 +53,5 @@ export default function Login() {
     </div>
   )
 }
+
+Login.layout = (page: ReactElement<Data.SharedProps>) => <AuthLayout>{page}</AuthLayout>

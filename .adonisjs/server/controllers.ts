@@ -4,6 +4,10 @@
  */
 
 export const controllers = {
-  NewAccount: () => import('#controllers/new_account_controller'),
-  Session: () => import('#controllers/session_controller'),
+  auth: {
+    Session: () => import('#controllers/auth/session_controller'),
+  },
+  system: {
+    User: () => import('#controllers/system/user_controller'),
+  },
 }

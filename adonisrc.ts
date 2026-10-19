@@ -59,6 +59,7 @@ export default defineConfig({
     () => import('@adonisjs/inertia/inertia_provider'),
     () => import('@adonisjs/auth/auth_provider'),
     () => import('#providers/api_provider'),
+    () => import('@codenameryuu/adonis-lucid-soft-deletes/provider'),
   ],
 
   /*
@@ -70,7 +71,7 @@ export default defineConfig({
   |
   */
   preloads: [
-    () => import('#start/routes'),
+    () => import('#start/routes/index'),
     () => import('#start/kernel'),
     () => import('#start/validator'),
   ],

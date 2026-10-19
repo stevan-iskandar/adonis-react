@@ -2,14 +2,34 @@
 import type { routes } from './index.ts'
 
 export interface ApiDefinition {
-  home: typeof routes['home']
-  newAccount: {
-    create: typeof routes['new_account.create']
-    store: typeof routes['new_account.store']
+  api: {
+    system: {
+      user: {
+        index: typeof routes['api.system.user.index']
+        options: typeof routes['api.system.user.options']
+        show: typeof routes['api.system.user.show']
+        store: typeof routes['api.system.user.store']
+        update: typeof routes['api.system.user.update']
+        changePassword: typeof routes['api.system.user.changePassword']
+        delete: typeof routes['api.system.user.delete']
+      }
+    }
   }
-  session: {
-    create: typeof routes['session.create']
-    store: typeof routes['session.store']
-    destroy: typeof routes['session.destroy']
+  web: {
+    auth: {
+      login: typeof routes['web.auth.login'] & {
+        submit: typeof routes['web.auth.login.submit']
+      }
+      logout: {
+        submit: typeof routes['web.auth.logout.submit']
+      }
+    }
+    home: typeof routes['web.home']
+    system: {
+      user: {
+        index: typeof routes['web.system.user.index']
+        edit: typeof routes['web.system.user.edit']
+      }
+    }
   }
 }
