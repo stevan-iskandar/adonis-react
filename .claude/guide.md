@@ -499,13 +499,18 @@ Files are snake_case, exported components PascalCase (`main_layout.tsx` → `Mai
 
 ### Layouts
 
-`resolvePageComponent`'s third argument in `app.tsx` is the default layout, `MainLayout`. A page that needs another one sets its own, which wins:
+The default layout is `createInertiaApp({ layout: () => MainLayout })` in `app.tsx`. What a page puts in its static `layout` decides what happens:
 
-```tsx
-Login.layout = (page: ReactElement<Data.SharedProps>) => <AuthLayout>{page}</AuthLayout>
-```
+| `Page.layout =` | Result |
+| --- | --- |
+| nothing | `MainLayout`, titled after the active menu entry |
+| `{ title: 'Users' }` | `MainLayout` with those props (`layoutProps` is typed in `inertia/types/types.ts`) |
+| `(props) => ({ title: … })` | the same, computed from the page's props |
+| `(page) => <AuthLayout title="Login">{page}</AuthLayout>` | that layout instead |
 
-A layout reads the shared props from its child, `children.props.auth.user`. Every layout renders `<FlashToaster />`, which shows `flash.success` / `flash.error` as toasts.
+Not `resolvePageComponent`'s third argument, which the starter used: Adonis's helper sets it only when the page has no `layout` at all, so a page passing `{ title }` would get no layout.
+
+A layout reads shared props with `usePage().props.auth`. Every layout renders `<FlashToaster />`, which shows `flash.success` / `flash.error` as toasts.
 
 ### How a page gets typed data
 

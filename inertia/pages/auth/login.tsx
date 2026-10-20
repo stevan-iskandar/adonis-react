@@ -2,56 +2,64 @@ import AuthLayout from '#inertia/layouts/auth_layout'
 import { env } from '#inertia/library/constants/env_constant'
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
+import { Form as AntdForm, Button, Checkbox, Input } from 'antd'
+import { Lock, Mail } from 'lucide-react'
 import { type ReactElement } from 'react'
 
 export default function Login() {
   return (
-    <div className="form-container">
-      <div>
-        <h1> Login </h1>
-        <p>Enter your details below to login to your account</p>
-      </div>
+    <>
+      <Form route="web.auth.login.submit" disableWhileProcessing>
+        {({ errors, processing }) => (
+          <>
+            <AntdForm.Item
+              className="mb-4!"
+              validateStatus={errors.email ? 'error' : undefined}
+              help={errors.email}
+            >
+              <Input
+                name="email"
+                size="large"
+                type="email"
+                autoFocus
+                autoComplete="username"
+                placeholder="Email"
+                prefix={<Mail size="1em" />}
+                defaultValue={env.debug ? env.adminEmail : undefined}
+              />
+            </AntdForm.Item>
 
-      <div>
-        <Form route="web.auth.login.submit">
-          {({ errors }) => (
-            <>
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  autoComplete="username"
-                  data-invalid={errors.email ? 'true' : undefined}
-                  defaultValue={env.debug ? env.adminEmail : undefined}
-                />
-                {errors.email && <div>{errors.email}</div>}
-              </div>
+            <AntdForm.Item
+              className="mb-4!"
+              validateStatus={errors.password ? 'error' : undefined}
+              help={errors.password}
+            >
+              <Input.Password
+                name="password"
+                size="large"
+                autoComplete="current-password"
+                placeholder="Password"
+                prefix={<Lock size="1em" />}
+                defaultValue={env.debug ? env.adminPass : undefined}
+              />
+            </AntdForm.Item>
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  autoComplete="current-password"
-                  defaultValue={env.debug ? env.adminPass : undefined}
-                />
-                {errors.password ? <span>{errors.password}</span> : ''}
-              </div>
+            <AntdForm.Item className="mb-4!">
+              <Checkbox name="remember">Remember me</Checkbox>
+            </AntdForm.Item>
 
-              <div>
-                <button type="submit" className="button">
-                  Login
-                </button>
-              </div>
-            </>
-          )}
-        </Form>
-      </div>
-    </div>
+            <Button block htmlType="submit" type="primary" size="large" loading={processing}>
+              Sign in
+            </Button>
+          </>
+        )}
+      </Form>
+    </>
   )
 }
 
-Login.layout = (page: ReactElement<Data.SharedProps>) => <AuthLayout>{page}</AuthLayout>
+Login.layout = (page: ReactElement<Data.SharedProps>) => (
+  <AuthLayout title="Login" description="Enter your details below to login to your account">
+    {page}
+  </AuthLayout>
+)

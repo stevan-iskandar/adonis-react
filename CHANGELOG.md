@@ -21,3 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **The panel's shell:** login page, main layout with a side menu that
   shows only what the user may open, and toasts for flash messages.
 - **CI on GitHub Actions** for every push to `main`.
+- **The panel's shell:** a sign-in page with an optional "Remember me", and
+  a main layout with a collapsible side menu that shows only what the user
+  may open, keeps the current page's entry selected, and asks before
+  signing out. Flash messages appear as toasts.
+

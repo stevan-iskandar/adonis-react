@@ -6,9 +6,11 @@ Discussion backlog from the 2026-09-23 onboarding. Each segment is discussed on 
 
 - [ ] **Reopened 2026-10-19:** commit `.adonisjs/` or not? Found: the official starter commits it on purpose (it is in the initial commit and not in the starter's `.gitignore`), and without it a fresh clone cannot run any `node ace` command that boots the app — `list:routes` and `migration:status` both fail with "Cannot find module .adonisjs/server/controllers.js", imported by `app/library/helpers/route.ts` through the routes preload — until `node ace codegen` or `npm run dev` has run. Ignoring it buys diffs free of generated files. Rec: keep it committed, as the starter does, and mark it `linguist-generated` in `.gitattributes` so GitHub collapses it in diffs. CI runs `node ace codegen` either way.
 
+- [ ] Change Password in the user menu (left out of the 2026-10-20 layout port): the existing `api.system.user.changePassword` is an admin changing someone else's password under `userEdit`. Changing one's own needs its own endpoint — no permission, checks the current password — and a modal like app-updater's `change-password-modal.tsx`. Wanted, and where does the endpoint live (`auth` group)?
+
 ## Build-out (implementation, not discussion)
 
-Decided and not built yet, as of 2026-10-16. Built items are removed from this list; the decision stays in Done.
+Decided and not built yet, as of 2026-10-20. Built items are removed from this list; the decision stays in Done.
 
 - [ ] 422 helper mapping `{ errors: { field: [msg] } }` onto an antd form, in `inertia/library/helpers/`.
 - [ ] Date helper in `inertia/library/helpers/`: formats an ISO string as `DD MMM YYYY HH:mm` in the browser's time zone with dayjs. `dayjs` is installed only through antd, so it becomes a direct dependency first.
@@ -24,10 +26,6 @@ Decided and not built yet, as of 2026-10-16. Built items are removed from this l
 - [ ] ESLint `no-restricted-imports` on `app/controllers/**` (S3).
 - [ ] Japa setup (session login helper, `withGlobalTransaction`, factories) and tests for the core business flows (S9).
 - [ ] Stop tracking `.adonisjs/`: add `.adonisjs` to `.gitignore` (checked 2026-10-19: it is **not** there, contrary to the earlier note), then `git rm -r --cached .adonisjs` (S9).
-- [ ] `.gitattributes` with `* text=auto eol=lf`, then `git add --renormalize .` (S9).
-- [ ] GitHub Actions (S9), proposed 2026-10-19 after reading app-updater's `tests.yml` and `dependabot.yml`: `.github/workflows/ci.yml` (Postgres 17 service; job-level env for `start/env.ts`; `npm ci` → `node ace codegen` → lint → typecheck → `migration:run` → `npm test` → `npm run build`) and `.github/dependabot.yml` for action updates. Verified in a copy with the same env: codegen, lint, both typechecks, test runner and build pass once the lint fixes below are in; `npm ci` accepts the lockfile, which carries the Linux native binaries. Not verified: `migration:run` on a fresh database (Podman was not running). Found on the way: without env vars `node ace codegen` fails on `start/env.ts`, and the typecheck then fails on the missing registry.
-- [ ] Lint fixes for CI (2026-10-19): `npx eslint --fix .` (18 type-only imports become inline `type`, `application.tsx` formatting, `<Layout.Footer />`); `eslint.config.js` ignores `public/assets/**` (Vite output, otherwise linted after a build) and sets `'@typescript-eslint/no-shadow': ['error', { allow: ['trx'] }]` for the `withTransaction((trx) => …, trx)` pattern; `base_axios.ts` renames the inner `.catch((error) => …)` in `baseFileDownload`.
-- [ ] `CHANGELOG.md` with an empty `## [Unreleased]`, started by the first commit that changes behaviour.
 
 ## Later
 
@@ -35,6 +33,7 @@ Decided and not built yet, as of 2026-10-16. Built items are removed from this l
 
 ## Done
 
+- [x] Built 2026-10-20 (owner): the main layout ported from app-updater (collapsible sider remembered per browser, header title, sign-out confirm, active entry kept on child pages), the default layout moved to `createInertiaApp({ layout })` so a page sets `Page.layout = { title }`, the antd sign-in page with "Remember me" and `disableWhileProcessing`. Built 2026-10-19 with the first commit: `.gitattributes`, the CI workflow and Dependabot, the lint fixes, `CHANGELOG.md`.
 - [x] Git — **Decided 2026-10-16 (owner):** the remote is `github.com/stevan-iskandar/adonis-react`, default branch `main`. Commits go straight to `main` while the owner works alone (Rec, not objected to).
 - [x] `.claude/` in git — **Decided 2026-10-16:** `conventions.md`, `architecture.md`, `guide.md` and `todo.md` are committed; `settings.local.json` never.
 - [x] Learning mode — **Decided 2026-10-16:** written into the repository's `CLAUDE.md`, so every session follows it, and removed from there when the owner wants Claude to write code. The owner also asked for a `README.md`.

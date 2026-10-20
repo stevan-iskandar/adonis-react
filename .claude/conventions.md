@@ -95,6 +95,8 @@ The rules this codebase follows. The reasoning, Adonis internals and worked exam
 - Tables and every create, update and delete go to `/api` through the module's axios class and an antd `Form`. Only login and logout use Inertia's `<Form>`.
 - One axios class per module, `inertia/library/axios/{group}/{module}_axios.ts`, extending `BaseAxios` with `readonly resource = 'api.{group}.{module}'`. A call beyond CRUD uses `this.request(routeName, args)`. Never a hand-written URL.
 - Errors: the interceptor handles 401, 403, 413 and 5xx; the caller handles 422 (mapped onto the form) and other 4xx.
+- `MainLayout` is the default layout (`createInertiaApp({ layout })`). A page names its title with `Page.layout = { title }`, or gets its menu entry's label. Another layout is a render function: `Page.layout = (page) => <AuthLayout …>{page}</AuthLayout>`.
+- A form submitted through Inertia's `<Form>` sets `disableWhileProcessing` and shows `processing` on its button, so it cannot be sent twice.
 - The side menu is defined once, in `side_menu_constant.tsx`, with `permission` and `path` (`urlFor(...)`) per item.
 - Shared props live under `auth` (`auth.user`, `auth.permissions`) so they never collide with page props.
 - Only `VITE_*` variables reach React, and they are baked into the bundle at build time: never a secret.
@@ -127,6 +129,7 @@ New dependencies, new top-level folders, schema changes, and new domain groups.
 
 Newest first. "Divergence" marks a deliberate difference from the Laravel sibling projects.
 
+- **2026-10-20** — The panel's layout is app-updater's, ported. Pages pass it props through `Page.layout = { title }` instead of wrapping themselves in `<AppLayout title>`, because the layout here is applied by default. Divergence from app-updater in form only.
 - **2026-10-16** — CHANGELOG collects entries under `Unreleased` and is cut into a version only when the owner says so. Divergence from app-updater, which versions every change.
 - **2026-10-16** — Default branch `main`; `.claude/` docs are committed; learning mode is stated in `CLAUDE.md`.
 - **2026-10-16** — Dates cross the boundary as ISO 8601, are stored as UTC, and are shown in the browser's time zone as `DD MMM YYYY HH:mm`.
